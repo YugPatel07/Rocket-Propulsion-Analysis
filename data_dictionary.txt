@@ -413,7 +413,7 @@ For questions or data corrections, refer to authoritative sources listed above.
 VERSION HISTORY:
 ================
 
-v1.0 - November 2025
+Date - November 2025
 - Initial compilation of 70 global propellant combinations
 - Comprehensive feature set (37 variables)
 - International coverage (USA, Russia, China, India, Japan, Europe)
