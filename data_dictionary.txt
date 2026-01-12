@@ -1,0 +1,422 @@
+ROCKET PROPELLANT DATABASE - DATA DICTIONARY
+=====================================================
+
+Database: rocket_propellants_global_database.csv
+Total Records: 70 propellant combinations
+Last Updated: November 2025
+
+=====================================================
+VARIABLE DEFINITIONS
+=====================================================
+
+IDENTIFICATION VARIABLES:
+-------------------------
+
+1. Propellant_ID
+   - Type: Integer
+   - Range: 1-70
+   - Description: Unique identifier for each propellant combination
+
+2. Propellant_Name
+   - Type: String
+   - Description: Chemical formula or common name of propellant
+   - Examples: "LOX+LH2", "N2O4+UDMH", "AP+HTPB+Al"
+
+3. Propellant_Type
+   - Type: Categorical
+   - Values: Liquid_Biprop, Monopropellant, Solid_Propellant, Hybrid, Tripropellant
+   - Description: Primary classification of propellant system
+
+4. Chemical_Family
+   - Type: Categorical
+   - Values: Cryogenic, Hydrocarbon, Hypergolic, Storable, Green_Monoprop, 
+            Composite_Solid, Alcohol, Peroxide, Exotic, Metallized, etc.
+   - Description: Chemical/storage classification
+
+5. Country_Origin
+   - Type: Categorical
+   - Values: USA, Russia, USSR, China, India, Japan, Europe, Germany, UK, Sweden, France
+   - Description: Primary country/region of development
+
+=====================================================
+PERFORMANCE METRICS:
+--------------------
+
+6. Vacuum_Isp_sec
+   - Type: Float
+   - Units: seconds
+   - Range: 180-542
+   - Description: Specific impulse in vacuum conditions
+   - Higher is better
+   - Key performance indicator
+
+7. SL_Isp_sec
+   - Type: Float
+   - Units: seconds
+   - Range: 155-470
+   - Description: Specific impulse at sea level
+   - Relevant for first-stage/booster applications
+   - NA for propellants not used at sea level
+
+8. Characteristic_Velocity_m_s
+   - Type: Float
+   - Units: meters/second
+   - Range: 1280-2950
+   - Description: c* - combustion chamber characteristic velocity
+   - Measure of combustion efficiency
+   - Independent of nozzle design
+
+9. Combustion_Temp_K
+   - Type: Float
+   - Units: Kelvin
+   - Range: 1100-4500
+   - Description: Adiabatic flame temperature in combustion chamber
+   - Higher enables better performance but creates materials challenges
+
+10. Exhaust_MW_g_mol
+    - Type: Float
+    - Units: g/mol
+    - Range: 10.0-30.5
+    - Description: Average molecular weight of exhaust gases
+    - Lower is better (lighter molecules = higher exhaust velocity)
+
+11. Optimal_MR_O_F
+    - Type: Float
+    - Units: ratio (mass oxidizer / mass fuel)
+    - Range: 1.28-8.0
+    - Description: Optimal mixture ratio for maximum Isp
+    - NA for monopropellants and solids
+
+12. Bulk_Density_g_cm3
+    - Type: Float
+    - Units: g/cm³
+    - Range: 0.36-1.95
+    - Description: Average density of complete propellant system
+    - Higher density = smaller tanks = lower structural mass
+
+13. Density_Impulse_sec_g_cm3
+    - Type: Float
+    - Units: seconds·g/cm³
+    - Range: 162-556
+    - Description: Isp × Bulk_Density - volumetric performance metric
+    - Combines performance and density advantages
+
+=====================================================
+PHYSICAL PROPERTIES - OXIDIZER:
+--------------------------------
+
+14. Oxidizer_Density_g_cm3
+    - Type: Float
+    - Units: g/cm³
+    - Range: 1.14-1.89
+    - Description: Density of oxidizer component
+    - NA for monopropellants and solid propellants
+
+15. Oxidizer_BP_C
+    - Type: Float
+    - Units: °Celsius
+    - Range: -206 to 60
+    - Description: Boiling point of oxidizer at 1 atm
+    - Determines if cryogenic storage needed
+
+16. Oxidizer_FP_C
+    - Type: Float
+    - Units: °Celsius
+    - Range: -224 to -0.4
+    - Description: Freezing point of oxidizer
+    - Determines minimum storage temperature
+
+=====================================================
+PHYSICAL PROPERTIES - FUEL:
+----------------------------
+
+17. Fuel_Density_g_cm3
+    - Type: Float
+    - Units: g/cm³
+    - Range: 0.071-2.50
+    - Description: Density of fuel component
+    - NA for monopropellants and solid propellants
+
+18. Fuel_BP_C
+    - Type: Float
+    - Units: °Celsius
+    - Range: -253 to 2861
+    - Description: Boiling point of fuel at 1 atm
+    - Very high values indicate metals (liquid above melting point)
+
+19. Fuel_FP_C
+    - Type: Float
+    - Units: °Celsius
+    - Range: -259 to 1538
+    - Description: Freezing point of fuel
+    - For metals, this is melting point
+
+20. Vapor_Pressure_20C_kPa
+    - Type: Float
+    - Units: kilopascals
+    - Range: 0.1-5170
+    - Description: Vapor pressure at 20°C (room temperature)
+    - High values indicate need for pressurized tanks
+    - NA for many propellants (cryogenic, solids, etc.)
+
+=====================================================
+ECONOMIC FACTORS:
+-----------------
+
+21. Cost_Score_1_10
+    - Type: Integer
+    - Scale: 1 (cheapest) to 10 (most expensive)
+    - Description: Relative cost for production and handling
+    - Factors: raw material cost, production complexity, purity requirements
+    - 1-2: Simple, abundant (LOX, RP-1)
+    - 5-6: Moderate complexity (green propellants)
+    - 9-10: Exotic, hazardous, or rare materials (fluorine, lithium)
+
+22. Storage_Temp_C
+    - Type: Float
+    - Units: °Celsius
+    - Range: -220 to 20
+    - Description: Required storage temperature for propellant system
+    - Room temp (~15-20°C): storable propellants
+    - Cryogenic (<-150°C): requires active cooling
+
+23. Storability_Days
+    - Type: Integer
+    - Units: days
+    - Range: 1-1825 (5 years)
+    - Description: Maximum practical storage duration
+    - 1-7: Very limited (cryogenics with boiloff)
+    - 30-90: Short-term (some peroxides)
+    - 365-1825: Long-term storable (hypergolics, solids)
+
+=====================================================
+OPERATIONAL COMPLEXITY:
+-----------------------
+
+24. Handling_Complexity_1_10
+    - Type: Integer
+    - Scale: 1 (simple) to 10 (extremely complex)
+    - Description: Difficulty of ground operations, fueling, safety procedures
+    - 3-4: Standard liquid handling (RP-1, some solids)
+    - 5-7: Requires special training (cryogenics, hypergolics)
+    - 9-10: Extreme hazards (fluorine, beryllium)
+
+25. Infrastructure_Score_1_10
+    - Type: Integer
+    - Scale: 1 (minimal) to 10 (extensive)
+    - Description: Ground support equipment and facility requirements
+    - 3-4: Basic tanks and pumps
+    - 6-8: Cryogenic facilities, thermal protection
+    - 9-10: Specialized safety systems for toxic/exotic propellants
+
+=====================================================
+SAFETY & ENVIRONMENTAL:
+-----------------------
+
+26. Toxicity_Score_0_10
+    - Type: Integer
+    - Scale: 0 (non-toxic) to 10 (extremely toxic)
+    - Description: Human health hazard level
+    - 0-2: Minimal hazard (water vapor, CO2)
+    - 3-5: Moderate (peroxides, some alcohols)
+    - 6-8: High toxicity (hydrazine derivatives, nitric acids)
+    - 9-10: Extreme (fluorine compounds, beryllium, chlorine trifluoride)
+
+27. Corrosivity_Score_0_10
+    - Type: Integer
+    - Scale: 0 (non-corrosive) to 10 (extremely corrosive)
+    - Description: Material compatibility challenges
+    - 2-3: Minimal (LOX, LH2, hydrocarbons)
+    - 5-7: Moderate (peroxides, hypergolics)
+    - 8-10: Severe (acids, fluorine compounds, chlorine trifluoride)
+
+28. Hypergolic_Binary
+    - Type: Binary
+    - Values: 0 (no), 1 (yes)
+    - Description: Does the propellant ignite spontaneously on contact?
+    - 1 = Hypergolic (no ignition system needed)
+    - 0 = Requires igniter
+
+29. Flash_Point_C
+    - Type: Float
+    - Units: °Celsius
+    - Range: -253 to 140
+    - Description: Minimum temperature for fuel vapor ignition
+    - Lower = more flammable
+    - NA for non-flammable propellants
+
+30. Autoignition_Temp_C
+    - Type: Float
+    - Units: °Celsius
+    - Range: 35-651
+    - Description: Temperature at which spontaneous ignition occurs
+    - Lower = more reactive/dangerous
+    - NA for many propellants
+
+31. Environmental_Impact_Score_1_10
+    - Type: Integer
+    - Scale: 1 (minimal impact) to 10 (severe environmental damage)
+    - Description: Exhaust products and environmental concerns
+    - 1-2: Clean combustion (H2O only)
+    - 3-5: Moderate (CO2, NOx)
+    - 6-8: Toxic exhaust (chlorine, nitrogen tetroxide)
+    - 9-10: Persistent toxins (HF, beryllium oxide)
+
+=====================================================
+TECHNICAL CAPABILITIES:
+-----------------------
+
+32. Restartable_Binary
+    - Type: Binary
+    - Values: 0 (no), 1 (yes)
+    - Description: Can the engine be shut down and restarted?
+    - Most liquids: 1
+    - Most solids: 0
+    - Critical for orbital maneuvering
+
+33. Throttleable_Binary
+    - Type: Binary
+    - Values: 0 (no), 1 (yes)
+    - Description: Can thrust be varied during operation?
+    - Most liquids: 1
+    - Solids: 0 (some exceptions with geometry)
+
+34. TRL_1_9
+    - Type: Integer
+    - Scale: 1-9 (NASA Technology Readiness Level)
+    - Description: Development maturity
+    - 1-3: Basic research, proof of concept
+    - 4-6: Laboratory/component testing
+    - 7-8: System demonstrated in relevant environment
+    - 9: Flight proven through successful missions
+
+35. Flight_Heritage_Count
+    - Type: Integer
+    - Units: number of missions/flights
+    - Range: 0-10000+
+    - Description: Approximate number of successful operational uses
+    - 0: Never flown
+    - 1-50: Limited use
+    - 100-1000: Well-proven
+    - 5000+: Workhorse propellant
+
+=====================================================
+APPLICATION:
+------------
+
+36. Application_Primary
+    - Type: Categorical
+    - Values: First_Stage, Upper_Stage, Booster, RCS, Satellite_RCS, 
+             Orbital_Maneuvering, Deep_Space, Tactical_Missile, Research,
+             Mobile_Launch, Quick_Response, ISRU_Candidate, Micropropulsion
+    - Description: Primary intended use case
+    - Guides mission-specific propellant selection
+
+37. Notes
+    - Type: String
+    - Description: Additional context, specific vehicles, historical info, 
+                   key characteristics
+    - Examples: "SpaceX Falcon 9", "Abandoned due to toxicity"
+
+=====================================================
+DATA SOURCES & METHODOLOGY:
+===========================
+
+Primary Sources:
+- NASA CEA (Chemical Equilibrium with Applications)
+- RocketCEA computational thermodynamics
+- JANNAF propellant databases
+- NIST Chemistry WebBook
+- Astronautix.com propellant encyclopedia
+- Published space agency technical reports (NASA, ESA, ISRO, JAXA, CNSA)
+- Peer-reviewed aerospace engineering literature
+
+Computational Assumptions:
+- Isp values: Chamber pressure 1000-6895 kPa (1000-6000 psi typical)
+- Nozzle expansion ratios: 60:1 for vacuum, appropriate for sea level
+- Shifting equilibrium in exhaust
+- Ideal nozzle expansion
+
+Scoring Methodology:
+- Cost scores: Relative assessment based on material availability, 
+               production complexity, and purity requirements
+- Safety scores: Based on MSDS hazard classifications, operational history,
+                 and regulatory requirements
+- Complexity scores: Industry expert consensus from published literature
+
+Data Limitations:
+- Some experimental propellants have estimated rather than measured values
+- Cost data is relative and time-dependent
+- Exact Isp varies with engine design details
+- Flight heritage counts are approximate
+- Some classified military data unavailable
+
+=====================================================
+RECOMMENDED ANALYSIS APPROACHES:
+================================
+
+For PCA (Principal Component Analysis):
+- Standardize all continuous variables (z-scores)
+- Consider log transformation for: Flight_Heritage_Count, Storability_Days
+- Categorical variables: Create dummy variables or use correspondence analysis
+- Expected primary loadings: PC1 likely performance-related, PC2 density/volume
+
+For PLS (Partial Least Squares):
+- Response variable options: Vacuum_Isp_sec, Density_Impulse, Cost_Score
+- Predictor sets: Physical properties, Safety metrics, Operational factors
+- Cross-validation essential for small sample size
+- VIP (Variable Importance in Projection) scores identify key predictors
+
+Clustering Analysis:
+- K-means or hierarchical clustering on PC scores
+- Expected clusters: Cryogenics, Hypergolics, Solids, Exotics
+- Validate against Chemical_Family variable
+
+Missing Data:
+- NA values are intentional (e.g., no fuel/oxidizer for monopropellants)
+- For statistical analysis, consider:
+  - Separate analysis by Propellant_Type
+  - Imputation where scientifically justified
+  - Complete case analysis
+
+Multicollinearity:
+- Expected high correlations:
+  - Vacuum_Isp_sec ↔ Characteristic_Velocity_m_s
+  - Toxicity_Score ↔ Environmental_Impact_Score
+  - Handling_Complexity ↔ Infrastructure_Score
+- Check VIF (Variance Inflation Factor) before regression
+
+=====================================================
+RECOMMENDED VISUALIZATIONS:
+===========================
+
+1. Isp vs Density scatter (colored by Chemical_Family)
+2. Radar/spider plots for safety scores by propellant type
+3. Heatmap of correlation matrix
+4. PCA biplot (observations + variable loadings)
+5. 3D plot: Isp vs Density vs Cost
+6. Parallel coordinates plot for multi-objective comparison
+7. TRL vs Flight_Heritage (technology maturity assessment)
+
+=====================================================
+CITATION:
+=========
+
+If using this database for research or publication, please cite:
+- Original data compilation: November 2025
+- Primary sources: NASA, JANNAF, NIST, International space agencies
+- Computational tool: RocketCEA for theoretical performance calculations
+
+For questions or data corrections, refer to authoritative sources listed above.
+
+=====================================================
+VERSION HISTORY:
+================
+
+v1.0 - November 2025
+- Initial compilation of 70 global propellant combinations
+- Comprehensive feature set (37 variables)
+- International coverage (USA, Russia, China, India, Japan, Europe)
+- Mix of operational, historical, and experimental propellants
+
+=====================================================
