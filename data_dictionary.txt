@@ -373,7 +373,6 @@ Clustering Analysis:
 - Validate against Chemical_Family variable
 
 Missing Data:
-- NA values are intentional (e.g., no fuel/oxidizer for monopropellants)
 - For statistical analysis, consider:
   - Separate analysis by Propellant_Type
   - Imputation where scientifically justified
