@@ -3,7 +3,7 @@ ROCKET PROPELLANT DATABASE - DATA DICTIONARY
 
 Database: rocket_propellants_global_database.csv
 Total Records: 70 propellant combinations
-Last Updated: November 2025
+Last Updated: January 2026
 
 =====================================================
 VARIABLE DEFINITIONS
